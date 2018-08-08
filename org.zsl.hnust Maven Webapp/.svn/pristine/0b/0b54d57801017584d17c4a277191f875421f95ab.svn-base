@@ -1,0 +1,89 @@
+package com.synyi.edc.pojo;
+/**
+ * 参数传递和返回对象pojo
+ * @author wy
+ *
+ */
+public class Parameter {
+	
+	private static final long serialVersionUID = 1L;
+//	private String type; //条件类型
+//	private String beginDate;
+//	private String endDate;
+//	private String orgArray;
+//	private String orgType; //三种类型   1  全部医院 2 部分医院 3 某家医院
+	private String labName; //检验名称
+	
+	private String queryType; 
+	
+	private String eventData;
+	private String groupData;
+	
+	private String orgName;//医院名称
+	
+	private String itemId; //检查id
+	private String itemName; //检查名称
+	
+	
+	
+	public String getItemId() {
+		return itemId;
+	}
+	public void setItemId(String itemId) {
+		this.itemId = itemId;
+	}
+	public String getItemName() {
+		return itemName;
+	}
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+	public String getLabName() {
+		return labName;
+	}
+	public void setLabName(String labName) {
+		this.labName = labName;
+	}
+	public String getOrgName() {
+		return orgName;
+	}
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
+	}
+	public String getOrgCode() {
+		return orgCode;
+	}
+	public void setOrgCode(String orgCode) {
+		this.orgCode = orgCode;
+	}
+	private String orgCode;
+	
+	
+	public String getQueryType() {
+		return queryType;
+	}
+	public void setQueryType(String queryType) {
+		this.queryType = queryType;
+	}
+	public String getEventData() {
+		return eventData;
+	}
+	public void setEventData(String eventData) {
+		this.eventData = eventData;
+	}
+	public String getGroupData() {
+		return groupData;
+	}
+	public void setGroupData(String groupData) {
+		this.groupData = groupData;
+	}
+	@Override
+	public String toString() {
+		return "Parameter [queryType=" + queryType + ", eventData=" + eventData
+				+ ", groupData=" + groupData + "]";
+	}
+	
+ 
+ 
+
+}

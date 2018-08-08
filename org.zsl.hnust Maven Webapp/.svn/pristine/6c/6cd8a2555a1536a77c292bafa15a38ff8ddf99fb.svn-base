@@ -1,0 +1,23 @@
+package com.synyi.edc.dao;
+
+import java.util.List;
+
+import com.synyi.edc.pojo.Parameter;
+/**
+ * sqlbuilder 语句生成dao
+ * @author wy
+ *
+ */
+public interface ISqlbuilderDao {
+	/**
+	 * 获取所有的医院列表
+	 * @return
+	 */
+    List<Parameter> getAllOrgInfo();
+    /**
+     * 根据检查名称 模糊穷举所有检查名称
+     * @param par 参数传递为 labName
+     * @return
+     */
+    List<Parameter> getAllLabInfo(Parameter par);
+}

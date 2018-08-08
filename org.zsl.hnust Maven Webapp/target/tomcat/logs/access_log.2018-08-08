@@ -1,0 +1,4 @@
+0:0:0:0:0:0:0:1 - - [08/Aug/2018:11:12:37 +0800] "GET /synyi-service/sqlbuilder/getParentPath?drugId=drg013923 HTTP/1.1" 200 252 http-bio-8080-exec-1 883
+0:0:0:0:0:0:0:1 - - [08/Aug/2018:11:12:37 +0800] "GET /favicon.ico HTTP/1.1" 404 - http-bio-8080-exec-3 0
+0:0:0:0:0:0:0:1 - - [08/Aug/2018:14:49:35 +0800] "GET /synyi-service/sqlbuilder/getAllDrugPathInfo?drugId=drg013923 HTTP/1.1" 500 10724 http-bio-8080-exec-1 687
+0:0:0:0:0:0:0:1 - - [08/Aug/2018:14:50:16 +0800] "GET /synyi-service/sqlbuilder/getAllDrugPathInfo?drugId=drg013923 HTTP/1.1" 200 1906 http-bio-8080-exec-1 604

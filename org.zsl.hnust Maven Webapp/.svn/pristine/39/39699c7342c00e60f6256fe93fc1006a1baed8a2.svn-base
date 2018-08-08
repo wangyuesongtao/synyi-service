@@ -1,0 +1,10 @@
+package com.synyi.edc.service;
+
+import java.util.List;
+
+import com.synyi.edc.pojo.Parameter;
+
+public interface ISqlbuilderService {
+	public List<Parameter> getAllOrgInfo();
+	public List<Parameter> getAllLabInfo(Parameter labname);
+}

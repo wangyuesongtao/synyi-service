@@ -1,0 +1,41 @@
+package com.synyi.edc.pojo;
+
+public class Parameter {
+	
+//	private String type; //条件类型
+//	private String beginDate;
+//	private String endDate;
+//	private String orgArray;
+//	private String orgType; //三种类型   1  全部医院 2 部分医院 3 某家医院
+	private String queryType;
+	
+	private String eventData;
+	private String groupData;
+	public String getQueryType() {
+		return queryType;
+	}
+	public void setQueryType(String queryType) {
+		this.queryType = queryType;
+	}
+	public String getEventData() {
+		return eventData;
+	}
+	public void setEventData(String eventData) {
+		this.eventData = eventData;
+	}
+	public String getGroupData() {
+		return groupData;
+	}
+	public void setGroupData(String groupData) {
+		this.groupData = groupData;
+	}
+	@Override
+	public String toString() {
+		return "Parameter [queryType=" + queryType + ", eventData=" + eventData
+				+ ", groupData=" + groupData + "]";
+	}
+	
+ 
+ 
+
+}

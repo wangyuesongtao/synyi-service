@@ -1,0 +1,10 @@
+package com.synyi.edc.dao;
+
+import java.util.List;
+
+import com.synyi.edc.pojo.Parameter;
+
+public interface ISqlbuilderDao {
+    List<Parameter> getAllOrgInfo();
+    List<Parameter> getAllLabInfo(Parameter par);
+}

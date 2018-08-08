@@ -1,0 +1,5 @@
+获取所有医院列表接口  
+http://192.168.1.211:8080/synyi-service/sqlbuilder/getAllOrg
+
+查询检验名称接口 返回穷举模糊匹配检验名称   POST 形式
+http://192.168.1.211:8080/synyi-service/sqlbuilder/getAlllabInfo?lanName=

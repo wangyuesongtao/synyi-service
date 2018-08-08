@@ -1,0 +1,52 @@
+package com.synyi.edc.util;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+
+/**
+ * XML工具类
+ * 
+ */
+public class XmlUtils {
+
+    private static Document doc = null;
+    static{
+    	try{
+    		doc = new SAXReader().read(XmlUtils.class.getClassLoader().getResourceAsStream("synyi_sqlbuild.xml"));
+    	}catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * XML转为Map集合
+    * @param doc
+     * @return
+     */
+    private static Map<String, String> xmlToMap(){
+        // 将字符串转为xml
+        Map<String, String> msg = new HashMap<String, String>();
+        Element root = doc.getRootElement();
+        for (Iterator iterator = root.elementIterator(); iterator.hasNext();) {
+            Element e = (Element) iterator.next();
+            msg.put(e.getName(), e.getText());
+        }
+        return msg;
+    }
+    
+    public static String getMapString(String key){
+    	if(StringUtils.isNotBlank(xmlToMap().get(key))){
+    		return xmlToMap().get(key).trim();
+    	}
+    	return "";
+    	
+    	
+    }
+   
+}

@@ -1,0 +1,32 @@
+package com.synyi.edc.service;
+
+import java.util.List;
+
+import com.synyi.edc.pojo.Parameter;
+/**
+ * 查询数据库接口
+ * @author wy
+ *
+ */
+public interface ISqlbuilderService {
+	/**
+	 * 获取所有的医院列表
+	 */
+	public List<Parameter> getAllOrgInfo();
+	/**
+	 * 获取检验名称
+	 */
+	public List<Parameter> getAllLabInfo(Parameter labname);
+	/**
+     * 获取检验结果,文本结果和数字结果等suggestion列表
+     * @param par
+     * @return
+     */
+    public List<Parameter> getSuggestionList(Parameter par);
+    /**
+     * 根据药品名称 模糊穷举所有药品名称
+     * @param par 参数传递为 labName
+     * @return
+     */
+    public List<Parameter> getAllDrugInfo(Parameter par);
+}

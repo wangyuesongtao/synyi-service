@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<synyi>
+	<orgCode.oneOrg remark="一家医院的条件">
+		 and org_code = ## 
+	</orgCode.oneOrg>
+	<orgCode.manyOrg remark="多家医院的条件">
+		 and org_code in (##) 
+	</orgCode.manyOrg>
+	<dateTime.fromTo>
+		 and #date# between #beginDate# and #endDate# 
+	</dateTime.fromTo>
+</synyi>

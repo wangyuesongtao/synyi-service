@@ -1,0 +1,6 @@
+192.168.1.211 - - [07/Aug/2018:13:59:47 +0800] "GET /synyi-service/sqlbuilder/getAllDrugCategory HTTP/1.1" 200 1299 http-bio-8080-exec-1 678
+192.168.1.211 - - [07/Aug/2018:13:59:47 +0800] "GET /favicon.ico HTTP/1.1" 404 - http-bio-8080-exec-3 0
+192.168.1.211 - - [07/Aug/2018:13:59:57 +0800] "GET /synyi-service/sqlbuilder/getSuggestionByDrug?drugName=v HTTP/1.1" 200 287 http-bio-8080-exec-2 135
+192.168.1.211 - - [07/Aug/2018:13:59:58 +0800] "GET /favicon.ico HTTP/1.1" 404 - http-bio-8080-exec-6 0
+0:0:0:0:0:0:0:1 - - [07/Aug/2018:16:06:09 +0800] "GET /synyi-service/sqlbuilder/getChildDrug?drugId=drg000001 HTTP/1.1" 200 1299 http-bio-8080-exec-1 596
+0:0:0:0:0:0:0:1 - - [07/Aug/2018:16:06:09 +0800] "GET /favicon.ico HTTP/1.1" 404 - http-bio-8080-exec-3 0

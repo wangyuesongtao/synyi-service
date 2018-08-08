@@ -1,0 +1,327 @@
+  
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
+
+import sun.org.mozilla.javascript.internal.ast.ReturnStatement;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+  
+public class Test {  
+    public static void main(String args[]) {  
+        
+    	List list = new ArrayList();
+    	
+    	Map<String,Map> map = new HashMap();
+    	list.add(map);
+    	
+		Map<String,String> map_event = new HashMap();
+		map.put("事件", map_event);
+		map_event.put("event_type", "诊断");
+		map_event.put("diag_standard", "I21,H2,K8");
+		
+//		Map<String,String> map_time = new HashMap();
+//		map.put("时间", map_time);
+//		map_time.put("time_from", "绝对时间:2017-01-01");
+//		map_time.put("time_to", "绝对时间:2017-01-10");
+		
+//		Map<String,String> map_hospital = new HashMap();
+//		map.put("医院", map_hospital);
+//		map_hospital.put("org_code", "9983838x,111999441,2224589985,112445580");
+//		
+//		Map<String,String> map_visitType = new HashMap();
+//		map.put("就诊类型", map_visitType);
+//		map_visitType.put("visit_type", "急诊");
+		
+//		
+		Map map1 = new HashMap();
+    	map1.putAll(map);
+    	map1.put("关系", "and");
+    	list.add(map1);
+		
+    	String jsonStr = "[{\"事件\":{\"diag_standard\":[\"I220\",\"I230\"],\"diag_primitive\":[\"I220\",\"I230\"],\"event_type\":\"diagnosis\"},\"医院\":{\"org_code\":[\"111111\",\"222222\"]},\"就诊类型\":{\"visit_type\":\"emergency\"},\"时间\":{\"time_from\":\"2018-7-2\",\"time_to\":\"2018-8-12\"},\"关系\":\"or\"},{\"事件\":{\"diag_standard\":[\"I220\",\"I230\"],\"diag_primitive\":[\"I220\",\"I230\"],\"event_type\":\"diagnosis\"},\"医院\":{\"org_code\":[\"111111\",\"222222\",\"333333\"]},\"就诊类型\":{\"visit_type\":\"emergency\"},\"时间\":{\"time_from\":\"2018-7-10\",\"time_to\":\"2018-8-7\"},\"关系\":\"or\"}]";
+    	
+    	String setpStr = "{\"groupType\":\"医院\",\"interval\":\"\",\"maxValue\":\"\",\"minValue\":\"\"}";
+		String jsonString = JSONObject.toJSON(list).toString();
+	//	System.out.println(jsonString);
+		
+	//	System.out.println(jsonString); 
+		Map<String,Map> temp1 = null;  //入排条件1
+		Map temp2 = null;  //入排条件2
+		List<Map> lis = (List)JSON.parse(jsonStr);
+		if(!CollectionUtils.isEmpty(lis)){
+			temp1 = lis.get(0);
+			if(lis.size()>1){
+				temp2 = lis.get(1);
+			}
+		}
+		
+		//System.out.println(temp2);
+	//	String returnSql = event_diagnose(temp1);
+//		if(!CollectionUtils.isEmpty(temp2)){
+//			
+//			String rel = (String)temp2.get("关系");
+//			if("or".equals(rel)){
+//				returnSql += " \r\n union all  \r\n "+event_diagnose(temp2);
+//			}
+//		}
+		
+//		String groupType = "年份";
+//		String selType = "人数";
+//		if("年份".equals(groupType)){
+//			String selSql = "";
+//			if("人数".equals(selType)){
+//				selSql = "count(distinct patient_id)";
+//			}else{
+//				selSql = "count(1)";
+//			}
+//			
+//			returnSql = " select to_char(diag_time,'yyyy') diag_year,"+selSql+" from (   \r\n "
+//					+returnSql+" )t group by to_char(diag_time,'yyyy') order by diag_year";
+//		}
+		
+		Map stepMap = (Map)JSON.parse(setpStr);;
+		//System.out.println(stepMap);
+		//stepMap.put("groupType","就诊类型");
+		stepMap.put("queryType","patientsNumber");
+		
+		//System.out.println(event_diagnose(temp1,stepMap));
+		
+		
+		//System.out.println(event_diagnose(temp1,groupMap));
+		String groupType = stepMap.get("groupType")==null?"":(String)stepMap.get("groupType");
+		
+		String returnSql = "with temp1 as ("+event_diagnose(temp1,stepMap)+")";
+		if(!CollectionUtils.isEmpty(temp2)){
+			returnSql += ", \r\n temp2 as ("+event_diagnose(temp2,stepMap)+")";
+			
+			String rel = (String)temp2.get("关系");
+			if("or".equals(rel)){
+				returnSql += " \r\n select ";
+				
+				if(StringUtils.isNotBlank(groupType)){
+					switch((String)stepMap.get("groupType")){
+						case "年龄段":returnSql += generateAgePart(0,100,10)+" 年龄段,";break;
+						case "年份":returnSql += "to_char(diag_time,'yyyy') 年份,";break;
+						case "医院":returnSql += "org_code,";break;
+						case "就诊类型":returnSql += "visit_type,";break;
+						case "性别":returnSql += "case when c.sex_code in ('2','9') then '女' when c.sex_code ='1' then '男' else '未知' end 性别,";break;
+					}
+				}
+				
+				if("patientsNumber".equals((String)stepMap.get("queryType"))){
+					returnSql += "count(distinct t.patient_id) 人数";
+				}else{
+					returnSql += "count(t.patient_id) 人次";
+				}
+				returnSql += " \r\n from (select * from temp1 union all  select * from temp2 )t ";
+				if("性别".equals((String)stepMap.get("groupType"))||"年龄段".equals((String)stepMap.get("groupType"))){
+					returnSql += " join patient.patient_master_info c on t.patient_id=c.patient_id \r\n";
+				}
+				if(StringUtils.isNotBlank(groupType)){
+					returnSql += " group by ";
+					switch((String)stepMap.get("groupType")){
+						case "年龄段":returnSql += generateAgePart(0,100,10);break;
+						case "年份":returnSql += "to_char(diag_time,'yyyy') ";break;
+						case "医院":returnSql += "org_code";break;
+						case "就诊类型":returnSql += "visit_type";break;
+						case "性别":returnSql += "case when c.sex_code in ('2','9') then '女' when c.sex_code ='1' then '男' else '未知' end";break;
+					}
+				}
+			}else if("and".equals(rel)){
+				returnSql += "select count(1) 人数 from (select distinct temp1.patient_id from temp1)a join (select distinct temp2.patient_id from temp2 ) b on a.patient_id=b.patient_id";
+			}
+		}else{//只有temp1的情况
+			
+			returnSql += "\r\n select ";
+			if(StringUtils.isNotBlank(groupType)){
+				switch((String)stepMap.get("groupType")){
+					case "年龄段":returnSql += generateAgePart(0,100,10)+" 年龄段,";break;
+					case "年份":returnSql += "to_char(diag_time,'yyyy') 年份,";break;
+					case "医院":returnSql += "org_code,";break;
+					case "就诊类型":returnSql += "visit_type,";break;
+					case "性别":returnSql += "case when c.sex_code in ('2','9') then '女' when c.sex_code ='1' then '男' else '未知' end 性别,\r\n";break;
+				}
+			}
+			if("patientsNumber".equals((String)stepMap.get("queryType"))){
+				returnSql += "count(distinct temp1.patient_id) 人数";
+			}else{  //visitsNumber 人次
+				returnSql += "count(temp1.patient_id) 人次";
+			}
+			returnSql += " from temp1 ";
+			
+			if("性别".equals((String)stepMap.get("groupType"))||"年龄段".equals((String)stepMap.get("groupType"))){
+				returnSql += " join patient.patient_master_info c on temp1.patient_id=c.patient_id \r\n ";
+			}
+			
+			
+			if(StringUtils.isNotBlank(groupType)){
+				returnSql += "group by ";
+				
+				switch((String)stepMap.get("groupType")){
+					case "年龄段":returnSql += generateAgePart(0,100,10);break;
+					case "年份":returnSql += "to_char(diag_time,'yyyy') ";break;
+					case "医院":returnSql += "org_code";break;
+					case "就诊类型":returnSql += "visit_type";break;
+					case "性别":returnSql += "case when c.sex_code in ('2','9') then '女' when c.sex_code ='1' then '男' else '未知' end";break;
+				}
+			}
+		}
+		
+		System.out.println(returnSql);
+		//generateAgePart(0,100,10);
+		
+    }  
+    public static String generateAgePart(int min,int max,int interval){
+    	String str = " case";
+    	
+    	int temp = min;
+    	for(int i=min;i<max;i+=interval){
+    		if(i>min){
+    			//System.out.println(temp+":"+i);
+    			if(temp==min){
+    				str += " when extract(year from age(diag_time,c.birth_date))  >="+temp +" and extract(year from age(diag_time,c.birth_date)) <"+i+" then '"+temp+"到"+i+"'\r\n";
+//    			
+    				}else if(i==max){
+//    				str += " when extract(year from age(temp1.diag_time,c.birth_date)) <="+max+" then '"+temp+"到"+max+"' end  ";
+    			}else{
+    				str += " when extract(year from age(diag_time,c.birth_date)) <"+i+" then '"+temp+"到"+i+"'\r\n";
+    			}	
+    			temp = i;
+    		}
+    	}
+    	str += " when extract(year from age(diag_time,c.birth_date)) <="+max+" then '"+temp+"到"+max+"' end \r\n ";
+    //	System.out.println(str);
+    	return str;
+    }
+    
+    public static String event_diagnose(Map<String,Map> temp1,Map groupMap){
+    	/*{"事件":{"diag_standard":"I21,I22,I23","event_type":"诊断"},"医院":{"org_code":"9983838x,111999441,2224589985,112445580"},
+		 * "就诊类型":{"visit_type":"门诊"},"时间":{"time_from":"绝对时间:2017-01-01","time_to":"绝对时间:2017-01-10"}}
+		 * 
+		 * {\"事件\":{\"diag_standard\":[\"I220\",\"I230\"],\"diag_primitive\":[\"I220\",\"I230\"],\"event_type\":\"diagnosis\"},
+		 * \"医院\":{\"org_code\":[\"111111\",\"222222\"]},\"就诊类型\":{\"visit_type\":\"hospitalization\"},\"时间\":{\"time_from\":\"2018-7-2\",\"time_to\":\"2018-8-12\"},
+		 * \"关系\":\"or\"}
+		 * 
+		 * */
+		String resultSql = "";
+		String condition = "";
+		//String eventType = "";
+		
+		for(String str:temp1.keySet()){
+			if("事件".equals(str)){  //"事件":{"diag_standard":"I21,I22,I23","event_type":"诊断"}
+				Map temp = temp1.get(str);
+				//if(temp.get("event_type").equals("diagnosis")){
+					//eventType = (String)temp.get("event_type");
+					//,diag_time,org_code,case when visit_type='O' then '门诊' when visit_type='I' then '住院' when is_emergency=true then '急诊' else '未知' end visit_type
+					resultSql += " select * from(select a.patient_id";
+							String groupType = groupMap.get("groupType")==null?"":(String)groupMap.get("groupType");
+							if(StringUtils.isNotBlank(groupType)){//"{\"groupType\":\"医院\",\"interval\":\"\",\"maxValue\":\"\",\"minValue\":\"\"}";
+								switch(groupType){
+									case "年龄段":resultSql += ",coalesce(a.diag_time,b.visit_time) diag_time";break;
+									case "年份":resultSql += ",coalesce(a.diag_time,b.visit_time) diag_time";break;
+									case "医院":resultSql += ",a.org_code";break;
+									case "就诊类型":resultSql += ",case when b.visit_type='O' then '门诊' when b.visit_type='I' then '住院' when is_emergency=true then '急诊' else '未知' end visit_type";break;
+									case "性别":resultSql += "";break;
+								}
+							}
+							
+							resultSql += ",jsonb_array_elements(diag_sycode_set) "+
+									"as sycode  \r\n from diag.patient_diagnose a ";
+							
+							String time_from = temp1.get("时间")==null?"":(String)temp1.get("时间").get("time_from");
+							String visit_type =  temp1.get("就诊类型")==null?"":(String)temp1.get("就诊类型").get("visit_type");
+							if(StringUtils.isNotBlank(time_from)||StringUtils.isNotBlank(visit_type)){
+								resultSql += " left join visit.visit_record b on a.visit_id = b.visit_id ";
+							}else{
+								if(StringUtils.isNotBlank(groupType)){
+									switch((String)groupMap.get("groupType")){
+										case "年龄段":resultSql += " left join visit.visit_record b on a.visit_id = b.visit_id ";break;
+										case "年份":resultSql += " left join visit.visit_record b on a.visit_id = b.visit_id ";break;
+										case "就诊类型":resultSql += " left join visit.visit_record b on a.visit_id = b.visit_id ";break;
+										//case "性别":resultSql += "";break;
+									}
+								}
+							}									
+							resultSql += "where 1=1 $condition$ ) t1  \r\n ";
+					
+					List<String> diag_list = (List)temp.get("diag_standard");
+					if(!CollectionUtils.isEmpty(diag_list)){
+						
+						resultSql += " join (select diag_code,diag_code2,diag_name from mdm.diagnose a where a.code_sys_id=30 \r\n ";
+						
+						if(diag_list.size()>1){
+							for(int i = 0;i<diag_list.size();i++){
+								String diag_c = diag_list.get(i);
+								if(i==0){
+									resultSql += " and ( diag_code2 like '"+diag_c+"%'";
+								}else if(i==diag_list.size()-1){
+									resultSql += " or diag_code2 like '"+diag_c+"%')";
+								}else{
+									resultSql += " or diag_code2 like '"+diag_c+"%'";
+								}
+							}
+						}else{
+							resultSql += " and diag_code2 like '"+diag_list.get(0)+"%'";
+						}
+						resultSql += " \r\n )t2 on replace(t1.sycode::varchar(50),'\"','')  =t2.diag_code";
+					}
+				//}
+			}else if("医院".equals(str)){ //"医院":{"org_code":"9983838x,111999441,2224589985,112445580"}
+				Map temp = temp1.get(str);
+				List<String> org_list = (List)temp.get("org_code");
+				if(!CollectionUtils.isEmpty(org_list)){
+					if(org_list.size()>1){
+						for(int i = 0;i<org_list.size();i++){
+							String org_code = org_list.get(i);
+							if(i==0){
+								condition += " and  a.org_code in ('"+org_code+"',";
+							}else if(i==org_list.size()-1){
+								condition += "'"+org_code+"')";
+							}else{
+								condition += "'"+org_code+"',";
+							}
+						}
+					}else{
+						condition += " and a.org_code = '"+org_list.get(0)+"'";
+					}
+				}
+				
+			}else if("时间".equals(str)){//"时间":{"time_from":"绝对时间:2017-01-01","time_to":"绝对时间:2017-01-10","time_type":"诊断时间"}
+				Map temp = temp1.get(str);
+				String time_from = (String)temp.get("time_from");
+				String time_to = (String)temp.get("time_to");
+				condition += " \r\n ";
+				if(StringUtils.isNoneBlank(time_from)&&StringUtils.isNoneBlank(time_to)){
+					condition += " and coalesce(a.diag_time,b.visit_time) between '"+time_from +"' and '"+time_to+"'";
+				}
+				
+//				switch(eventType){
+//					case "诊断":condition+= "and coalesce(a.diag_time,b.visit_time) ";break;
+//					case "检验时间":condition+= "and report_time ";break;
+//					case "用药时间":condition+= "and drug_time ";break;
+//					case "手术时间":condition+= "and oper_time ";break;
+//				}
+			}else if("就诊类型".equals(str)){//"就诊类型":{"visit_type":"门诊"}
+				Map temp = temp1.get(str);
+				String visit_type = (String)temp.get("visit_type");
+				condition += " \r\n ";
+				switch(visit_type){
+					case "outpat":condition+= " and b.visit_type='O' ";break;
+					case "inpat":condition+= " and b.visit_type='I' ";break;
+					case "emergency":condition+= " and b.is_emergency=true ";break;
+				}
+			}
+		}
+		
+		resultSql = resultSql.replace("$condition$", condition);
+		return resultSql;
+    }
+   
+    
+}  

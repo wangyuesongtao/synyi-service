@@ -1,0 +1,30 @@
+package com.synyi.edc.service.impl;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.synyi.edc.dao.ISqlbuilderDao;
+import com.synyi.edc.pojo.Parameter;
+import com.synyi.edc.service.ISqlbuilderService;
+
+@Service("sqlbuilderService")
+public class SqlbuilderServiceImpl implements ISqlbuilderService {
+	@Resource
+	private ISqlbuilderDao dao;
+	@Override
+	public List<Parameter> getAllOrgInfo() {
+		// TODO Auto-generated method stub
+		return this.dao.getAllOrgInfo();
+	}
+	@Override
+	public List<Parameter> getAllLabInfo(Parameter labname) {
+		// TODO Auto-generated method stub
+		return this.dao.getAllLabInfo( labname);
+	}
+
+	
+	
+}

@@ -1,0 +1,40 @@
+package com.synyi.edc.service.impl;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.synyi.edc.dao.ISqlbuilderDao;
+import com.synyi.edc.pojo.Parameter;
+import com.synyi.edc.service.ISqlbuilderService;
+/**
+ * 连接数据库查询service
+ * @author wy
+ *
+ */
+@Service("sqlbuilderService")
+public class SqlbuilderServiceImpl implements ISqlbuilderService {
+	@Resource
+	private ISqlbuilderDao dao;
+	/**
+	 * 获取所有的医院列表
+	 */
+	@Override
+	public List<Parameter> getAllOrgInfo() {
+		// TODO Auto-generated method stub
+		return this.dao.getAllOrgInfo();
+	}
+	/**
+	 * 获取检验名称
+	 */
+	@Override
+	public List<Parameter> getAllLabInfo(Parameter labname) {
+		// TODO Auto-generated method stub
+		return this.dao.getAllLabInfo( labname);
+	}
+
+	
+	
+}

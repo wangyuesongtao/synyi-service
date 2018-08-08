@@ -1,0 +1,141 @@
+/*package com.synyi.edc.controller;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.alibaba.fastjson.JSONObject;
+import com.synyi.edc.pojo.Parameter;
+import com.synyi.edc.pojo.User;
+import com.synyi.edc.service.IUserService;
+import com.synyi.edc.util.XmlUtils;
+
+@Controller
+@RequestMapping("/user")
+public class UserController {
+	@Resource
+	private IUserService userService;
+	
+	@RequestMapping("/showUser")
+	public String toIndex(HttpServletRequest request,Model model){
+		int userId = Integer.parseInt(request.getParameter("id"));
+		User user = this.userService.getUserById(userId);
+		model.addAttribute("user", user);
+		System.out.println(XmlUtils.getMapString("orgCode.oneOrg"));
+		return "showUser";
+	}
+	
+	@RequestMapping("/toIndex")
+	public String toJ(HttpServletRequest request,Model model){
+		int userId = Integer.parseInt(request.getParameter("id"));
+		User user = this.userService.getUserById(userId);
+		model.addAttribute("user", user);
+		return "index";
+	}
+	
+	@RequestMapping("/getAllOrg")
+	public String getAllOrg(HttpServletRequest request,Model model,HttpServletResponse res){
+		
+		Map map1 = new HashMap();
+		
+		map1.put("id", "488099744");
+		map1.put("name", "福州一院");
+		
+		Map map2 = new HashMap();
+		
+		map2.put("id", "48809974x");
+		map2.put("name", "福州儿院");
+		
+		Map map3 = new HashMap();
+		
+		map3.put("id", "488099743");
+		map3.put("name", "福州中医院");
+		
+		Map map4 = new HashMap();
+		
+		map4.put("id", "488099757");
+		map4.put("name", "福州传染病医院");
+		
+		List list = new ArrayList();
+		list.add(map1);
+		list.add(map2);
+		list.add(map3);
+		list.add(map4);
+		
+		String jsonString = JSONObject.toJSON(list).toString();
+		 res.setContentType("text/plain");
+		 res.setCharacterEncoding("utf-8");
+		 System.out.println(res);
+		 PrintWriter pw = null;
+		try {
+			pw = res.getWriter();
+			 pw.write(jsonString);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			 pw.flush();
+			 pw.close();
+		}
+		return null;
+	}
+	
+	@RequestMapping("/generateSql")
+	public String generateSql(HttpServletRequest request,Model model,Parameter param,HttpServletResponse res){
+		List list = new ArrayList();
+		if(StringUtils.isEmpty(param.getBeginDate())||StringUtils.isEmpty(param.getEndDate())||StringUtils.isEmpty(param.getOrgArray())){
+			Map map = new HashMap();
+			map.put("1", "请检查是否有为空的参数");
+			list.add(map);
+			printJson(res,list);
+		}else{
+			System.out.println(param);
+			Map map = new HashMap();
+			String resultSql = null ;
+			if("visit.in".equals(param.getType())){
+				resultSql = "select count(distinct patient_id) 人数,count(1) 人次  from visit.inpat_record where org_code in ("+param.getOrgArray()+") and is_valid=true"+ 
+							" and in_time between to_date('"+param.getBeginDate()+"','yyyy-mm-dd') and  to_date('"+param.getEndDate()+"','yyyy-mm-dd') ";
+			}else if("visit.out".equals(param.getType())){
+				resultSql = "select count(distinct patient_id) 人数,count(1) 人次  from visit.outpatient_record where org_code in ("+param.getOrgArray()+") and is_valid=true"+ 
+						" and reg_time between to_date('"+param.getBeginDate()+"','yyyy-mm-dd') and  to_date('"+param.getEndDate()+"','yyyy-mm-dd') ";
+			}else if("visit.visit".equals(param.getType())){
+				resultSql = "select count(distinct patient_id) 人数,count(1) 人次  from visit.visit_record where org_code in ("+param.getOrgArray()+") and is_valid=true"+ 
+						" and visit_time between to_date('"+param.getBeginDate()+"','yyyy-mm-dd') and  to_date('"+param.getEndDate()+"','yyyy-mm-dd') ";
+			}
+			map.put("sql", resultSql);
+			list.add(map);
+			printJson(res,list);
+		}
+		return null;
+	}
+	
+	public void printJson(HttpServletResponse res,List list){
+		
+		String jsonString = JSONObject.toJSON(list).toString();
+		 res.setContentType("text/plain");
+		 res.setCharacterEncoding("utf-8");
+		 System.out.println(res);
+		 PrintWriter pw = null;
+		try {
+			pw = res.getWriter();
+			 pw.write(jsonString);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			 pw.flush();
+			 pw.close();
+		}
+	}
+}
+*/

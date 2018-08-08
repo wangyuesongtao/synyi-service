@@ -1,0 +1,7 @@
+package com.synyi.edc.service;
+
+import com.synyi.edc.pojo.User;
+
+public interface IUserService {
+	public User getUserById(int userId);
+}

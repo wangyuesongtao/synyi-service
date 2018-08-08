@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.synyi.edc.dao.ISqlbuilderDao" >
+  <resultMap id="BaseResultMap" type="com.synyi.edc.pojo.Parameter" >
+    <result column="org_code" property="orgCode" jdbcType="VARCHAR" />
+    <result column="org_name" property="orgName" jdbcType="VARCHAR" />
+    <result column="item_id" property="itemId" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    
+    <result column="test_item_name" property="testItemName" jdbcType="VARCHAR" />
+    <result column="text_value" property="textValue" jdbcType="VARCHAR" />
+    <result column="numerical_value" property="numericalValue" jdbcType="VARCHAR" />
+    <result column="reference_range" property="referenceRange" jdbcType="VARCHAR" />
+    <result column="abnormal_flag_name" property="abnormalFlagName" jdbcType="VARCHAR" />
+    
+    <result column="drug_id" property="drugId" jdbcType="VARCHAR" />
+    <result column="drug_name" property="drugName" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  <select id="getAllOrgInfo" resultMap="BaseResultMap"  >
+    select 
+    org_code,org_name from mdm.organization
+  </select>
+  <select id="getAllLabInfo" resultMap="BaseResultMap"  parameterType="com.synyi.edc.pojo.Parameter">
+    select item_id,item_name from mdm.lis_item where code_sys_id =197 
+   	<if test="labName != null and labName != ''">
+   		and item_name like '%${labName}%'  
+   	</if>
+  </select>
+  
+  <select id="getSuggestionList" resultMap="BaseResultMap"  parameterType="com.synyi.edc.pojo.Parameter">
+    select distinct c.item_name,text_value,numerical_value,reference_range,abnormal_flag_name from  
+								lab.lab_report_result a join  mdm.mdm_map b on a.test_item_id=b.source_id 
+											 join mdm.lis_item c on  b.map_id=c.item_id 
+		where b.md_type = 'lis_item' and c.code_sys_id =197 
+   	<if test="itemId != null and itemId != ''">
+   		and c.item_id in (${itemId})
+   	</if>
+  </select>
+  
+  <select id="getAllDrugInfo" resultMap="BaseResultMap"  parameterType="com.synyi.edc.pojo.Parameter">
+    select drug_id,case when regular_name is null then trade_name else regular_name end drug_name
+  from mdm.drug t where t.code_sys_id = 51  
+   	<if test="drugName != null and drugName != ''">
+   		and (regular_name like '%${drugName}%'  or trade_name like '%${drugName}%')
+   	</if>
+  </select>
+</mapper>
