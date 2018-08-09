@@ -37,8 +37,22 @@ public class Parameter {
 	private String parent;
 	private List<String> strList;
 	private int strSize;
+	private String operationCode;
+	private String operationName;
 	
 	
+	public String getOperationCode() {
+		return operationCode;
+	}
+	public void setOperationCode(String operationCode) {
+		this.operationCode = operationCode;
+	}
+	public String getOperationName() {
+		return operationName;
+	}
+	public void setOperationName(String operationName) {
+		this.operationName = operationName;
+	}
 	public int getStrSize() {
 		return strSize;
 	}
@@ -152,9 +166,13 @@ public class Parameter {
 	}
 	@Override
 	public String toString() {
-		return "Parameter [queryType=" + queryType + ", eventData=" + eventData
-				+ ", groupData=" + groupData + "]";
+		return "Parameter [labName=" + labName + ", queryType=" + queryType
+				+ ", eventData=" + eventData + ", groupData=" + groupData
+				+ ", orgName=" + orgName + ", itemName=" + itemName
+				+ ", drugName=" + drugName + ", operationName=" + operationName
+				+ ", orgCode=" + orgCode + "]";
 	}
+	 
 	
  
  

@@ -63,4 +63,10 @@ public interface ISqlbuilderDao {
 	 * @return
 	 */
 	public List<Parameter> getAllDrugPathInfo(Parameter param);
+	/**
+	 * 模糊匹配获取所有的手术名称
+	 * @param param
+	 * @return
+	 */
+	public List<Parameter> getAllOperationInfo(Parameter param);
 }

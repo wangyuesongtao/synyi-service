@@ -27,3 +27,6 @@ http://172.16.0.217:8080/synyi-service/sqlbuilder/getParentPath?drugId=drg013923
 
 递归通过子类别将所有父类药品列出来并且所有父类的同类列出来   POST 形式
 http://172.16.0.217:8080/synyi-service/sqlbuilder/getAllDrugPathInfo?drugId=drg013923
+
+模糊匹配获取所有的手术名称   POST 形式
+http://172.16.0.217:8080/synyi-service/sqlbuilder/getAllOperationInfo?operationName=1

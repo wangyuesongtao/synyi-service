@@ -1,0 +1,32 @@
+sql语句生成接口
+http://172.16.0.217:8080/synyi-service/api/sqlbuilder/generate?eventData=&groupData=&queryType=
+
+获取所有医院列表接口  
+http://172.16.0.217:8080/synyi-service/sqlbuilder/getAllOrg
+
+查询检验名称接口 返回穷举模糊匹配检验名称   POST 形式
+http://172.16.0.217:8080/synyi-service/sqlbuilder/getAlllabInfo?labName=
+
+获取检验结果,文本结果和数字结果等suggestion列表   POST 形式
+http://172.16.0.217:8080/synyi-service/sqlbuilder/getSuggestionList?itemId='1','2','3','4'
+
+查询药品名称接口 返回穷举模糊匹配药品名称   POST 形式
+http://172.16.0.217:8080/synyi-service/sqlbuilder/getAllDrugInfo?drugName=c
+
+查询药品名称所有的大类   POST 形式
+http://172.16.0.217:8080/synyi-service/sqlbuilder/getAllDrugCategory
+
+查询药品名称接口 返回穷举模糊匹配药品名称   POST 形式
+http://172.16.0.217:8080/synyi-service/sqlbuilder/getSuggestionByDrug?drugName=v
+
+根据药品父节点名称获取子节点药品名称   POST 形式
+http://172.16.0.217:8080/synyi-service/sqlbuilder/getChildDrug?drugId=drg000001
+
+递归通过任一药品名称或药品种类将所有父类药品path列出来   POST 形式
+http://172.16.0.217:8080/synyi-service/sqlbuilder/getParentPath?drugId=drg013923
+
+递归通过子类别将所有父类药品列出来并且所有父类的同类列出来   POST 形式
+http://172.16.0.217:8080/synyi-service/sqlbuilder/getAllDrugPathInfo?drugId=drg013923
+
+模糊匹配获取所有的手术名称   POST 形式
+http://172.16.0.217:8080/synyi-service/sqlbuilder/getAllOperationInfo?operationName=1

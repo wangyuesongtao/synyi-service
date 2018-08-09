@@ -55,7 +55,7 @@ public class SqlBuilderUtils {
 			case "diagnosis":returnSql = "with temp1 as ("+event_diagnose(temp1,stepMap)+")";break;
 			case "laboratoryExamination":returnSql = "with temp1 as ("+event_lab(temp1,stepMap)+")";break;
 			case "drugUse":returnSql = "with temp1 as ("+event_drug(temp1,stepMap)+")";break;
-			case "operation":returnSql = "with temp1 as ("+event_lab(temp1,stepMap)+")";break;
+			case "operation":returnSql = "with temp1 as ("+event_operation(temp1,stepMap)+")";break;
 		}
 		
 		
@@ -64,7 +64,7 @@ public class SqlBuilderUtils {
 				case "diagnosis":returnSql += ", <br/> temp2 as ("+event_diagnose(temp2,stepMap)+")";break;
 				case "laboratoryExamination":returnSql += ", <br/> temp2 as ("+event_lab(temp2,stepMap)+")";break;
 				case "drugUse":returnSql += ", <br/> temp2 as ("+event_drug(temp2,stepMap)+")";break;
-				case "operation":returnSql += ", <br/> temp2 as ("+event_lab(temp2,stepMap)+")";break;
+				case "operation":returnSql += ", <br/> temp2 as ("+event_operation(temp2,stepMap)+")";break;
 			}
 			
 			String rel = (String)temp2.get("关系");
@@ -583,5 +583,79 @@ public class SqlBuilderUtils {
 			
 			
 			return returnSql;
+	    }
+	  public static String event_operation(Map<String,Map> temp1,Map groupMap){
+			String resultSql = "";
+			String condition = "";
+			//String eventType = "";
+			
+			for(String str:temp1.keySet()){
+				if("事件".equals(str)){  //"事件":{"diag_standard":"I21,I22,I23","event_type":"诊断"}
+					Map temp = temp1.get(str);
+						resultSql += " select t1.patient_id";
+								String groupType = groupMap.get("groupType")==null?"":(String)groupMap.get("groupType");
+								if(StringUtils.isNotBlank(groupType)){//"{\"groupType\":\"医院\",\"interval\":\"\",\"maxValue\":\"\",\"minValue\":\"\"}";
+									switch(groupType){
+										case "年龄段":resultSql += ",t2.operation_time event_time";break;
+										case "年份":resultSql += ",t2.operation_time event_time";break;
+										case "医院":resultSql += ",t2.org_code";break;
+										case "就诊类型":resultSql += ",'住院' visit_type";break;
+										case "性别":resultSql += "";break;
+									}
+								}
+								
+								resultSql += " from cases.case_base t1 join cases.case_operation t2 on t1.case_id=t2.case_id " ;
+								
+								resultSql += "where 1=1 $condition$  <br/> ";
+						
+			//{\"lab_standard\":[\"220\",\"230\"],\"character_result\":[\"偏高\",\"异常\"],\"exception_symbol\":[\"1\",\"2\"],\"number_result\":[\">=1\"],\"event_type\":\"lab\"}
+						List<String> opeartion_standard = (List)temp.get("opeartion_standard");
+						if(opeartion_standard!=null&&opeartion_standard.size()>0){
+							resultSql += " and t2.operation_code in (";
+							String tempLab = "";
+							for(String lab:opeartion_standard){
+								tempLab += "'"+lab+"',";
+							}
+							resultSql += tempLab.substring(0,tempLab.length()-1)+")";
+						}
+					//}
+				}else if("医院".equals(str)){ //"医院":{"org_code":"9983838x,111999441,2224589985,112445580"}
+					Map temp = temp1.get(str);
+					try{
+						List<String> org_list = (List)temp.get("org_code");
+						if(!CollectionUtils.isEmpty(org_list)){
+							if(org_list.size()>1){
+								for(int i = 0;i<org_list.size();i++){
+									String org_code = org_list.get(i);
+									if(i==0){
+										condition += " and  t2.org_code in ('"+org_code+"',";
+									}else if(i==org_list.size()-1){
+										condition += "'"+org_code+"')";
+									}else{
+										condition += "'"+org_code+"',";
+									}
+								}
+							}else{
+								condition += " and t2.org_code = '"+org_list.get(0)+"'";
+							}
+						}
+					}catch(java.lang.ClassCastException e){}
+					
+				}else if("时间".equals(str)){//"时间":{"time_from":"绝对时间:2017-01-01","time_to":"绝对时间:2017-01-10","time_type":"诊断时间"}
+					Map temp = temp1.get(str);
+					String time_from = (String)temp.get("time_from");
+					String time_to = (String)temp.get("time_to");
+					condition += " <br/> ";
+					if(StringUtils.isNoneBlank(time_from)&&StringUtils.isNoneBlank(time_to)){
+						condition += " and t2.operation_time between '"+time_from +"' and '"+time_to+"'";
+					}
+					
+				}else if("就诊类型".equals(str)){//"就诊类型":{"visit_type":"门诊"}
+					
+				}
+			}
+			
+			resultSql = resultSql.replace("$condition$", condition);
+			return resultSql;
 	    }
 }

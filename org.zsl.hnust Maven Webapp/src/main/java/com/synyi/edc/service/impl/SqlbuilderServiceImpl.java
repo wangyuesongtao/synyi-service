@@ -91,4 +91,12 @@ public class SqlbuilderServiceImpl implements ISqlbuilderService {
 	public List<Parameter> getAllDrugPathInfo(Parameter param){
 		return this.dao.getAllDrugPathInfo(param);
 	}
+	/**
+	 * 模糊匹配获取所有的手术名称
+	 * @param param
+	 * @return
+	 */
+	public List<Parameter> getAllOperationInfo(Parameter param){
+		return this.dao.getAllOperationInfo(param);
+	}
 }

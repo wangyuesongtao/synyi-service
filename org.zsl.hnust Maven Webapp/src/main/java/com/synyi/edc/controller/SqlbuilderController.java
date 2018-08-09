@@ -51,7 +51,7 @@ public class SqlbuilderController {
 	 */
 	@RequestMapping("/generate")
 	public String generate(HttpServletRequest request,Model model,Parameter param,HttpServletResponse res){
-		log.info("参数传递:"+param);
+		log.info("generate方法参数传递:"+param);
 		String jsonStr = param.getEventData();
     	String stepStr = param.getGroupData();
     	
@@ -104,7 +104,7 @@ public class SqlbuilderController {
 			map1.put("label", p.getOrgName());
 			list.add(map1);
 		}
-		
+		log.info("getAllOrg方法返回数据:"+list);
 		String jsonString = JSONObject.toJSON(list).toString();
 		printJson(res,jsonString);
 		return null;
@@ -119,7 +119,7 @@ public class SqlbuilderController {
 	 */
 	@RequestMapping("/getAlllabInfo")
 	public String getAllLabInfo(HttpServletRequest request,Model model,HttpServletResponse res,Parameter param){
-		
+		log.info("getAllLabInfo方法参数传递:"+param);
 		List<Parameter> par = sqlbuilderService.getAllLabInfo(param);
 		List list = new ArrayList();
 		for(Parameter p:par){
@@ -128,7 +128,7 @@ public class SqlbuilderController {
 			map1.put("label", p.getItemName());
 			list.add(map1);
 		}
-		
+		log.info("getAllLabInfo方法返回数据:"+list);
 		String jsonString = JSONObject.toJSON(list).toString();
 		printJson(res,jsonString);
 		return null;
@@ -144,7 +144,7 @@ public class SqlbuilderController {
 	 */
 	@RequestMapping("/getSuggestionList")
 	public String getSuggestionList(HttpServletRequest request,Model model,HttpServletResponse res,Parameter param){
-		
+		log.info("getSuggestionList方法参数传递:"+param);
 		List<Parameter> par = sqlbuilderService.getSuggestionList(param);
 		List list = new ArrayList();
 		for(Parameter p:par){
@@ -157,7 +157,7 @@ public class SqlbuilderController {
 			map1.put("abnormalFlagName", p.getAbnormalFlagName());
 			list.add(map1);
 		}
-		
+		log.info("getSuggestionList方法返回数据:"+list);
 		String jsonString = JSONObject.toJSON(list).toString();
 		printJson(res,jsonString);
 		return null;
@@ -173,7 +173,7 @@ public class SqlbuilderController {
 	 */
 	@RequestMapping("/getAllDrugInfo")
 	public String getAllDrugInfo(HttpServletRequest request,Model model,HttpServletResponse res,Parameter param){
-		
+		log.info("getAllDrugInfo方法参数传递:"+param);
 		List<Parameter> par = sqlbuilderService.getAllDrugInfo(param);
 		List list = new ArrayList();
 		for(Parameter p:par){
@@ -182,7 +182,7 @@ public class SqlbuilderController {
 			map1.put("label", p.getDrugName());
 			list.add(map1);
 		}
-		
+		log.info("getAllDrugInfo方法返回数据:"+list);
 		String jsonString = JSONObject.toJSON(list).toString();
 		printJson(res,jsonString);
 		return null;
@@ -206,7 +206,7 @@ public class SqlbuilderController {
 			map1.put("label", p.getDrugName());
 			list.add(map1);
 		}
-		
+		log.info("getAllDrugCategory方法返回数据:"+list);
 		String jsonString = JSONObject.toJSON(list).toString();
 		printJson(res,jsonString);
 		return null;
@@ -221,7 +221,7 @@ public class SqlbuilderController {
 	 */
 	@RequestMapping("/getSuggestionByDrug")
 	public String getSuggestionByDrug(HttpServletRequest request,Model model,HttpServletResponse res,Parameter param){
-		
+		log.info("getSuggestionByDrug方法参数传递:"+param);
 		List<Parameter> par = sqlbuilderService.getSuggestionByDrug(param);
 		List list = new ArrayList();
 		for(Parameter p:par){
@@ -230,7 +230,7 @@ public class SqlbuilderController {
 			map1.put("label", p.getDrugName());
 			list.add(map1);
 		}
-		
+		log.info("getSuggestionByDrug方法返回数据:"+list);
 		String jsonString = JSONObject.toJSON(list).toString();
 		printJson(res,jsonString);
 		return null;
@@ -245,7 +245,7 @@ public class SqlbuilderController {
 	 */
 	@RequestMapping("/getChildDrug")
 	public String getChildDrug(HttpServletRequest request,Model model,HttpServletResponse res,Parameter param){
-		
+		log.info("getChildDrug方法参数传递:"+param);
 		List<Parameter> par = sqlbuilderService.getChildDrug(param);
 		List list = new ArrayList();
 		for(Parameter p:par){
@@ -255,7 +255,7 @@ public class SqlbuilderController {
 			map1.put("parent", p.getParent());
 			list.add(map1);
 		}
-		
+		log.info("getChildDrug方法返回数据:"+list);
 		String jsonString = JSONObject.toJSON(list).toString();
 		printJson(res,jsonString);
 		return null;
@@ -271,7 +271,7 @@ public class SqlbuilderController {
 	 */
 	@RequestMapping("/getParentPath")
 	public String getParentPath(HttpServletRequest request,Model model,HttpServletResponse res,Parameter param){
-		
+		log.info("getParentPath方法参数传递:"+param);
 		List<Parameter> par = sqlbuilderService.getParentPath(param);
 		List list = new ArrayList();
 		for(Parameter p:par){
@@ -281,7 +281,7 @@ public class SqlbuilderController {
 			map1.put("parent", p.getParent());
 			list.add(map1);
 		}
-		
+		log.info("getParentPath方法返回数据:"+list);
 		String jsonString = JSONObject.toJSON(list).toString();
 		printJson(res,jsonString);
 		return null;
@@ -297,7 +297,7 @@ public class SqlbuilderController {
 	 */
 	@RequestMapping("/getAllDrugPathInfo")
 	public String getAllDrugPathInfo(HttpServletRequest request,Model model,HttpServletResponse res,Parameter param){
-		
+		log.info("getAllDrugPathInfo方法参数传递:"+param);
 		List<Parameter> par = sqlbuilderService.getParentPath(param);
 		List<String> strList = new ArrayList();
 		for(Parameter p:par){
@@ -314,6 +314,31 @@ public class SqlbuilderController {
 			map1.put("parent", p.getParent());
 			list.add(map1);
 		}
+		log.info("getAllDrugPathInfo方法返回数据:"+list);
+		String jsonString = JSONObject.toJSON(list).toString();
+		printJson(res,jsonString);
+		return null;
+	}
+	/**
+	 * 模糊匹配获取所有的手术名称
+	 * @param request
+	 * @param model
+	 * @param res
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping("/getAllOperationInfo")
+	public String getAllOperationInfo(HttpServletRequest request,Model model,HttpServletResponse res,Parameter param){
+		log.info("getAllOperationInfo方法参数传递:"+param);
+		List<Parameter> par = sqlbuilderService.getAllOperationInfo(param);
+		List list = new ArrayList();
+		for(Parameter p:par){
+			Map map1 = new HashMap();
+			map1.put("value", p.getOperationCode());
+			map1.put("label", p.getOperationName());
+			list.add(map1);
+		}
+		log.info("getAllOperationInfo方法返回数据:"+list);
 		String jsonString = JSONObject.toJSON(list).toString();
 		printJson(res,jsonString);
 		return null;

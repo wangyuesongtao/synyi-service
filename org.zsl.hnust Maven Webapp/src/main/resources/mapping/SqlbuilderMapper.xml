@@ -17,6 +17,9 @@
     <result column="drug_name" property="drugName" jdbcType="VARCHAR" />
     <result column="parent" property="parent" jdbcType="VARCHAR" />
     
+    <result column="operation_code" property="operationCode" jdbcType="VARCHAR" />
+    <result column="operation_name" property="operationName" jdbcType="VARCHAR" />
+    
   </resultMap>
   <select id="getAllOrgInfo" resultMap="BaseResultMap"  >
     select 
@@ -50,6 +53,12 @@
    	</if>
   </select>
   
+  <select id="getAllOperationInfo" resultMap="BaseResultMap"  parameterType="com.synyi.edc.pojo.Parameter">
+    select distinct operation_code,operation_name from cases.case_operation
+   	<if test="operationName != null and operationName != ''">
+   		where operation_name like '%${operationName}%'
+   	</if>
+  </select>
   <select id="getSuggestionByDrug" resultMap="BaseResultMap"  parameterType="com.synyi.edc.pojo.Parameter">
     select id drug_id, standard_ch drug_name from drug_new 
    	<if test="drugName != null and drugName != ''">

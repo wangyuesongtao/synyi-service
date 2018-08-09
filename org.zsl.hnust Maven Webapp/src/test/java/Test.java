@@ -10,11 +10,11 @@ import com.alibaba.fastjson.JSON;
 public class Test {  
     public static void main(String args[]) {  
        
-    	//String jsonStr = "[{\"事件\":{\"lab_standard\":[\"220\",\"230\"],\"character_result\":[\"偏高\",\"异常\"],\"exception_symbol\":[\"1\",\"2\"],\"number_result\":[\">=1\"],\"event_type\":\"lab\"},\"医院\":{\"org_code\":[\"111111\",\"222222\"]},\"就诊类型\":{\"visit_type\":\"emergency\"},\"时间\":{\"time_from\":\"2018-7-2\",\"time_to\":\"2018-8-12\"},\"关系\":\"or\"},{\"事件\":{\"lab_standard\":[\"21\",\"33\"],\"diag_primitive\":[\"I220\",\"I230\"],\"event_type\":\"lab\"},\"医院\":{\"org_code\":[\"111111\",\"222222\",\"333333\"]},\"就诊类型\":{\"visit_type\":\"emergency\"},\"时间\":{\"time_from\":\"2018-7-10\",\"time_to\":\"2018-8-7\"},\"关系\":\"or\"}]";
-    	String jsonStr = "[{\"事件\":{\"drug_standard\":[],\"drug_category\":[\"330\",\"543\"],\"event_type\":\"drugUse\"},\"医院\":{\"org_code\":[\"111111\",\"222222\"]},\"就诊类型\":{\"visit_type\":\"\"},\"时间\":{\"time_from\":\"2018-7-2\",\"time_to\":\"2018-8-12\"},\"关系\":\"or\"},{\"事件\":{\"drug_standard\":[\"21\",\"33\"],\"drug_category\":[\"I220\",\"I230\"],\"event_type\":\"drugUse\"},\"医院\":{\"org_code\":[\"111111\",\"222222\",\"333333\"]},\"就诊类型\":{\"visit_type\":\"\"},\"时间\":{\"time_from\":\"2018-7-10\",\"time_to\":\"2018-8-7\"},\"关系\":\"or\"}]";
-//    	//String jsonStr = "[{\"事件\":{\"lab_standard\":[\"220\",\"230\"],\"diag_primitive\":[\"I220\",\"I230\"],\"event_type\":\"lab\"},\"医院\":{\"org_code\":[\"111111\",\"222222\"]},\"就诊类型\":{\"visit_type\":\"outpat\"},\"时间\":{\"time_from\":\"2018-7-2\",\"time_to\":\"2018-8-12\"},\"关系\":\"or\"}]";
-    	//String jsonStr = " [ { \"事件\": { \"lab_standard\": [ \"2\", \"3\" ], \"character_result\": [ \"正常\" ], \"exception_symbol\": [], \"number_result\": [ \"\" ], \"event_type\": \"laboratoryExamination\" }, \"医院\": { \"org_code\": [ \"222222\", \"111111\" ] }, \"就诊类型\": { \"visit_type\": \"\" }, \"时间\": {} } ] ";
-    	String setpStr = "{\"groupType\":\"年龄段\",\"interval\":\"20\",\"maxValue\":\"100\",\"minValue\":\"0\"}";
+    	//String jsonStr = "[{\"事件\":{\"lab_standard\":[\"220\",\"230\"],\"character_result\":[\"偏高\",\"异常\"],\"exception_symbol\":[\"1\",\"2\"],\"number_result\":[\">=1\"],\"event_type\":\"laboratoryExamination\"},\"医院\":{\"org_code\":[\"111111\",\"222222\"]},\"就诊类型\":{\"visit_type\":\"emergency\"},\"时间\":{\"time_from\":\"2018-7-2\",\"time_to\":\"2018-8-12\"},\"关系\":\"or\"},{\"事件\":{\"lab_standard\":[\"21\",\"33\"],\"diag_primitive\":[\"I220\",\"I230\"],\"event_type\":\"laboratoryExamination\"},\"医院\":{\"org_code\":[\"111111\",\"222222\",\"333333\"]},\"就诊类型\":{\"visit_type\":\"emergency\"},\"时间\":{\"time_from\":\"2018-7-10\",\"time_to\":\"2018-8-7\"},\"关系\":\"or\"}]";
+    	String jsonStr = "[{\"事件\":{\"opeartion_standard\":[\"1\",\"2\"],\"event_type\":\"operation\"},\"医院\":{\"org_code\":[\"111111\",\"222222\"]},\"就诊类型\":{\"visit_type\":\"\"},\"时间\":{\"time_from\":\"2018-7-2\",\"time_to\":\"2018-8-12\"},\"关系\":\"or\"},{\"事件\":{\"opeartion_standard\":[\"21\",\"33\"],\"event_type\":\"operation\"},\"医院\":{\"org_code\":[\"111111\",\"222222\",\"333333\"]},\"就诊类型\":{\"visit_type\":\"\"},\"时间\":{\"time_from\":\"2018-7-10\",\"time_to\":\"2018-8-7\"},\"关系\":\"or\"}]";
+    	//String jsonStr = "[{\"事件\":{\"drug_standard\":[\"1\",\"2\"],\"drug_category\":[],\"event_type\":\"drugUse\"},\"医院\":{\"org_code\":[\"111111\",\"222222\"]},\"就诊类型\":{\"visit_type\":\"\"},\"时间\":{\"time_from\":\"2018-7-2\",\"time_to\":\"2018-8-12\"},\"关系\":\"or\"},{\"事件\":{\"drug_standard\":[\"21\",\"33\"],\"drug_category\":[\"330\",\"543\"],\"event_type\":\"drugUse\"},\"医院\":{\"org_code\":[\"111111\",\"222222\",\"333333\"]},\"就诊类型\":{\"visit_type\":\"\"},\"时间\":{\"time_from\":\"2018-7-10\",\"time_to\":\"2018-8-7\"},\"关系\":\"or\"}]";
+    	//String jsonStr = "[{\"事件\":{\"diag_standard\":[\"1\",\"2\"],\"diag_primitive\":[],\"event_type\":\"diagnosis\"},\"医院\":{\"org_code\":[\"111111\",\"222222\"]},\"就诊类型\":{\"visit_type\":\"\"},\"时间\":{\"time_from\":\"2018-7-2\",\"time_to\":\"2018-8-12\"},\"关系\":\"or\"},{\"事件\":{\"diag_standard\":[\"21\",\"33\"],\"diag_primitive\":[\"330\",\"543\"],\"event_type\":\"diagnosis\"},\"医院\":{\"org_code\":[\"111111\",\"222222\",\"333333\"]},\"就诊类型\":{\"visit_type\":\"\"},\"时间\":{\"time_from\":\"2018-7-10\",\"time_to\":\"2018-8-7\"},\"关系\":\"or\"}]";
+    	String setpStr = "{\"groupType\":\"医院\",\"interval\":\"20\",\"maxValue\":\"100\",\"minValue\":\"0\"}";
     	String returnSql = genGroupSql(jsonStr,setpStr);
     	System.out.println(returnSql);
 //		
@@ -86,7 +86,7 @@ public class Test {
 			case "diagnosis":returnSql = "with temp1 as ("+event_diagnose(temp1,stepMap)+")";break;
 			case "laboratoryExamination":returnSql = "with temp1 as ("+event_lab(temp1,stepMap)+")";break;
 			case "drugUse":returnSql = "with temp1 as ("+event_drug(temp1,stepMap)+")";break;
-			case "operation":returnSql = "with temp1 as ("+event_lab(temp1,stepMap)+")";break;
+			case "operation":returnSql = "with temp1 as ("+event_operation(temp1,stepMap)+")";break;
 		}
 		
 		
@@ -95,7 +95,7 @@ public class Test {
 				case "diagnosis":returnSql += ", \r\n temp2 as ("+event_diagnose(temp2,stepMap)+")";break;
 				case "laboratoryExamination":returnSql += ", \r\n temp2 as ("+event_lab(temp2,stepMap)+")";break;
 				case "drugUse":returnSql += ", \r\n temp2 as ("+event_drug(temp2,stepMap)+")";break;
-				case "operation":returnSql += ", \r\n temp2 as ("+event_lab(temp2,stepMap)+")";break;
+				case "operation":returnSql += ", \r\n temp2 as ("+event_operation(temp2,stepMap)+")";break;
 			}
 			
 			String rel = (String)temp2.get("关系");
@@ -580,5 +580,89 @@ public class Test {
 		return returnSql;
     }
    
-    
+    public static String event_operation(Map<String,Map> temp1,Map groupMap){
+    	/*{"事件":{"diag_standard":"I21,I22,I23","event_type":"诊断"},"医院":{"org_code":"9983838x,111999441,2224589985,112445580"},
+		 * "就诊类型":{"visit_type":"门诊"},"时间":{"time_from":"绝对时间:2017-01-01","time_to":"绝对时间:2017-01-10"}}
+		 * 
+		 * {\"事件\":{\"diag_standard\":[\"I220\",\"I230\"],\"diag_primitive\":[\"I220\",\"I230\"],\"event_type\":\"diagnosis\"},
+		 * \"医院\":{\"org_code\":[\"111111\",\"222222\"]},\"就诊类型\":{\"visit_type\":\"hospitalization\"},\"时间\":{\"time_from\":\"2018-7-2\",\"time_to\":\"2018-8-12\"},
+		 * \"关系\":\"or\"}
+		 * 
+		 * */
+		String resultSql = "";
+		String condition = "";
+		//String eventType = "";
+		
+		for(String str:temp1.keySet()){
+			if("事件".equals(str)){  //"事件":{"diag_standard":"I21,I22,I23","event_type":"诊断"}
+				Map temp = temp1.get(str);
+				//if(temp.get("event_type").equals("diagnosis")){
+					//eventType = (String)temp.get("event_type");
+					//,diag_time,org_code,case when visit_type='O' then '门诊' when visit_type='I' then '住院' when is_emergency=true then '急诊' else '未知' end visit_type
+					resultSql += " select t1.patient_id";
+							String groupType = groupMap.get("groupType")==null?"":(String)groupMap.get("groupType");
+							if(StringUtils.isNotBlank(groupType)){//"{\"groupType\":\"医院\",\"interval\":\"\",\"maxValue\":\"\",\"minValue\":\"\"}";
+								switch(groupType){
+									case "年龄段":resultSql += ",t2.operation_time event_time";break;
+									case "年份":resultSql += ",t2.operation_time event_time";break;
+									case "医院":resultSql += ",t2.org_code";break;
+									case "就诊类型":resultSql += ",'住院' visit_type";break;
+									case "性别":resultSql += "";break;
+								}
+							}
+							
+							resultSql += " from cases.case_base t1 join cases.case_operation t2 on t1.case_id=t2.case_id " ;
+							
+							resultSql += "where 1=1 $condition$  \r\n ";
+					
+		//{\"lab_standard\":[\"220\",\"230\"],\"character_result\":[\"偏高\",\"异常\"],\"exception_symbol\":[\"1\",\"2\"],\"number_result\":[\">=1\"],\"event_type\":\"lab\"}
+					List<String> opeartion_standard = (List)temp.get("opeartion_standard");
+					if(opeartion_standard!=null&&opeartion_standard.size()>0){
+						resultSql += " and t2.operation_code in (";
+						String tempLab = "";
+						for(String lab:opeartion_standard){
+							tempLab += "'"+lab+"',";
+						}
+						resultSql += tempLab.substring(0,tempLab.length()-1)+")";
+					}
+				//}
+			}else if("医院".equals(str)){ //"医院":{"org_code":"9983838x,111999441,2224589985,112445580"}
+				Map temp = temp1.get(str);
+				try{
+					List<String> org_list = (List)temp.get("org_code");
+					if(!CollectionUtils.isEmpty(org_list)){
+						if(org_list.size()>1){
+							for(int i = 0;i<org_list.size();i++){
+								String org_code = org_list.get(i);
+								if(i==0){
+									condition += " and  t2.org_code in ('"+org_code+"',";
+								}else if(i==org_list.size()-1){
+									condition += "'"+org_code+"')";
+								}else{
+									condition += "'"+org_code+"',";
+								}
+							}
+						}else{
+							condition += " and t2.org_code = '"+org_list.get(0)+"'";
+						}
+					}
+				}catch(java.lang.ClassCastException e){}
+				
+			}else if("时间".equals(str)){//"时间":{"time_from":"绝对时间:2017-01-01","time_to":"绝对时间:2017-01-10","time_type":"诊断时间"}
+				Map temp = temp1.get(str);
+				String time_from = (String)temp.get("time_from");
+				String time_to = (String)temp.get("time_to");
+				condition += " \r\n ";
+				if(StringUtils.isNoneBlank(time_from)&&StringUtils.isNoneBlank(time_to)){
+					condition += " and t2.operation_time between '"+time_from +"' and '"+time_to+"'";
+				}
+				
+			}else if("就诊类型".equals(str)){//"就诊类型":{"visit_type":"门诊"}
+				
+			}
+		}
+		
+		resultSql = resultSql.replace("$condition$", condition);
+		return resultSql;
+    }
 }  

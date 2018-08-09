@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.synyi.edc.dao.ISqlbuilderDao" >
+  <resultMap id="BaseResultMap" type="com.synyi.edc.pojo.Parameter" >
+    <result column="org_code" property="orgCode" jdbcType="VARCHAR" />
+    <result column="org_name" property="orgName" jdbcType="VARCHAR" />
+    <result column="item_id" property="itemId" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    
+    <result column="test_item_name" property="testItemName" jdbcType="VARCHAR" />
+    <result column="text_value" property="textValue" jdbcType="VARCHAR" />
+    <result column="numerical_value" property="numericalValue" jdbcType="VARCHAR" />
+    <result column="reference_range" property="referenceRange" jdbcType="VARCHAR" />
+    <result column="abnormal_flag_name" property="abnormalFlagName" jdbcType="VARCHAR" />
+    
+    <result column="drug_id" property="drugId" jdbcType="VARCHAR" />
+    <result column="drug_name" property="drugName" jdbcType="VARCHAR" />
+    <result column="parent" property="parent" jdbcType="VARCHAR" />
+    
+    <result column="operation_code" property="operationCode" jdbcType="VARCHAR" />
+    <result column="operation_name" property="operationName" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  <select id="getAllOrgInfo" resultMap="BaseResultMap"  >
+    select 
+    org_code,org_name from mdm.organization
+  </select>
+  <select id="getAllLabInfo" resultMap="BaseResultMap"  parameterType="com.synyi.edc.pojo.Parameter">
+    select item_id,item_name from mdm.lis_item where code_sys_id =197 
+   	<if test="labName != null and labName != ''">
+   		and item_name like '%${labName}%'  
+   	</if>
+  </select>
+  
+  <select id="getSuggestionList" resultMap="BaseResultMap"  parameterType="com.synyi.edc.pojo.Parameter">
+    select distinct c.item_name,text_value,numerical_value,reference_range,abnormal_flag_name from  
+								lab.lab_report_result a join  mdm.mdm_map b on a.test_item_id=b.source_id 
+											 join mdm.lis_item c on  b.map_id=c.item_id 
+		where b.md_type = 'lis_item' and c.code_sys_id =197 
+   	<if test="itemId != null and itemId != ''">
+   		and c.item_id in (${itemId})
+   	</if>
+  </select>
+  
+   <select id="getChildDrug" resultMap="BaseResultMap"  parameterType="com.synyi.edc.pojo.Parameter">
+    select id drug_id,parent, standard_ch drug_name from drug_new where parent = '${drugId}'
+  </select>
+  <select id="getAllDrugInfo" resultMap="BaseResultMap"  parameterType="com.synyi.edc.pojo.Parameter">
+    select drug_id,case when regular_name is null then trade_name else regular_name end drug_name
+  from mdm.drug t where t.code_sys_id = 51  
+   	<if test="drugName != null and drugName != ''">
+   		and (regular_name like '%${drugName}%'  or trade_name like '%${drugName}%')
+   	</if>
+  </select>
+  
+  <select id="getAllOperationInfo" resultMap="BaseResultMap"  parameterType="com.synyi.edc.pojo.Parameter">
+    select distinct operation_code,operation_name from cases.case_operation
+   	<if test="operationName != null and operationName != ''">
+   		where operation_name like '%${operationName}%'
+   	</if>
+  </select>
+  <select id="getSuggestionByDrug" resultMap="BaseResultMap"  parameterType="com.synyi.edc.pojo.Parameter">
+    select id drug_id, standard_ch drug_name from drug_new 
+   	<if test="drugName != null and drugName != ''">
+   		where original_name like '%${drugName}%' or standard_ch like '%${drugName}%'
+   	</if>
+  </select>
+   <select id="getAllDrugCategory" resultMap="BaseResultMap" >
+    select id drug_id,standard_ch drug_name from drug_new where parent = 'drg000001'
+  </select>
+  <select id="getAllDrugPathInfo" resultMap="BaseResultMap"  parameterType="com.synyi.edc.pojo.Parameter">
+  	<foreach collection="strList" item="str" index="idx">
+ 		<if test="idx+1 != strSize">
+ 			select id drug_id,parent,standard_ch drug_name from drug_new where parent = '${str}' union all
+ 		</if>		
+ 		<if test="idx+1 == strSize">
+ 			select id drug_id,parent,standard_ch drug_name from drug_new where parent = '${str}' 
+ 		</if>
+	</foreach>
+  </select>
+  
+  <select id="getParentPath" resultMap="BaseResultMap" >
+    with RECURSIVE  temp1 as (
+	select * from drug_new where id ='${drugId}'
+	union ALL
+	select d.* from drug_new d ,temp1 where temp1.parent=d.id
+	)select id drug_id,parent,standard_ch drug_name from temp1 where id != 'drg000001'
+  </select>
+</mapper>
